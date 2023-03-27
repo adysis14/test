@@ -43,10 +43,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const commentBody = 'updated';
-            const existingCommentId = steps.check_comment.outputs.alreadyCommented.id;
+            const lastCommentId = steps.check_comment.outputs.alreadyCommented.id;
             await github.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: existingCommentId,
+              comment_id: lastCommentId,
               body: commentBody
             });
