@@ -1,18 +1,18 @@
-# name: Auto message
-# on:
-#   pull_request:
+name: Auto message
+on:
+  pull_request:
   
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-#     permissions:
-#       pull-requests: write
-#     steps:
-#       - uses: mshick/add-pr-comment@v2
-#         with:
-#           message: |
-#             **Hello World!**
-#             😊
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            **Hello World!**
+            😊
             
 # name: Comment on Pull Request
 
