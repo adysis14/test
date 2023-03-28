@@ -12,7 +12,7 @@ jobs:
         id: check_comment
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}/////////////////////////////
           script: |
             const issueCommentResponse = await github.issues.listComments({
               owner: context.repo.owner,
