@@ -1,52 +1,52 @@
-name: Comment on PR status
+# name: Comment on PR status
 
-on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+# on:
+#   pull_request:
+#     types: [opened, reopened, synchronize]
 
-jobs:
-  comment_on_pr:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check if PR is already commented
-        id: check_comment
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const issueCommentResponse = await github.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number
-            });
-            const alreadyCommented = issueCommentResponse.data.find(comment => comment.body.includes('opened') || comment.body.includes('updated'));
-            return { alreadyCommented };
+# jobs:
+#   comment_on_pr:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check if PR is already commented
+#         id: check_comment
+#         uses: actions/github-script@v4
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           script: |
+#             const issueCommentResponse = await github.issues.listComments({
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               issue_number: context.issue.number
+#             });
+#             const alreadyCommented = issueCommentResponse.data.find(comment => comment.body.includes('opened') || comment.body.includes('updated'));
+#             return { alreadyCommented };
 
-      - name: Comment on PR
-        if: steps.check_comment.outputs.alreadyCommented == null
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const commentBody = 'opened';
-            await github.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: commentBody
-            });
+#       - name: Comment on PR
+#         if: steps.check_comment.outputs.alreadyCommented == null
+#         uses: actions/github-script@v4
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           script: |
+#             const commentBody = 'opened';
+#             await github.issues.createComment({
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               issue_number: context.issue.number,
+#               body: commentBody
+#             });
 
-      - name: Update PR comment
-        if: steps.check_comment.outputs.alreadyCommented != null
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const commentBody = 'updated';
-            const lastCommentId = steps.check_comment.outputs.alreadyCommented.id;
-            await github.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: lastCommentId,
-              body: commentBody
-            });
+#       - name: Update PR comment
+#         if: steps.check_comment.outputs.alreadyCommented != null
+#         uses: actions/github-script@v4
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           script: |
+#             const commentBody = 'updated';
+#             const lastCommentId = steps.check_comment.outputs.alreadyCommented.id;
+#             await github.issues.updateComment({
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               comment_id: lastCommentId,
+#               body: commentBody
+#             });
