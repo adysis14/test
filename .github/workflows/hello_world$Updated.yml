@@ -21,7 +21,7 @@ jobs:
         id: check_first_open
 
       - name: Comment on PR
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         with:
           script: |
             const firstOpen = ${{ steps.check_first_open.outputs.first_open }};
