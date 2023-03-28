@@ -1,0 +1,51 @@
+name: Comment on Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check if PR is opened for the first time
+      run: |
+        if [ $(jq '.action' <<< "${{ github.event_name }}") = "opened" ]; then
+          echo "::set-output name=is_first_time::true"
+        else
+          echo "::set-output name=is_first_time::false"
+        fi
+      id: check_opened
+
+    - name: Comment on PR
+      if: steps.check_opened.outputs.is_first_time == 'true'
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'Hello World!'
+          })
+
+    - name: Update comment
+      if: steps.check_opened.outputs.is_first_time != 'true'
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const comment = await github.issues.listComments({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+          const latestComment = comment.data[comment.data.length-1];
+          await github.issues.updateComment({
+            comment_id: latestComment.id,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'updated'
+          })
