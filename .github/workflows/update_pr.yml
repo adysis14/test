@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Check if PR is already commented
         id: check_comment
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -25,7 +25,7 @@ jobs:
 
       - name: Comment on PR
         if: steps.check_comment.outputs.alreadyCommented == null
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -39,7 +39,7 @@ jobs:
 
       - name: Update PR comment
         if: steps.check_comment.outputs.alreadyCommented != null
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
